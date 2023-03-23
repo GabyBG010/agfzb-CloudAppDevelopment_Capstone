@@ -6,7 +6,14 @@ Returns:
 from cloudant.client import Cloudant
 from cloudant.error import CloudantException
 import requests
+import os
 
+
+PARAM_DICT = {
+   "COUCH_URL":os.environ['COUCH_URL'],
+    "IAM_API_KEY": os.environ['IAM_API_KEY'],
+    "COUCH_USERNAME": os.environ['IBM_USERNAME'],
+}
 
 def main(param_dict):
     """Main Function
@@ -17,7 +24,8 @@ def main(param_dict):
     Returns:
         _type_: _description_ TODO
     """
-
+    print("IN MAIN")
+    print(param_dict)
     try:
         client = Cloudant.iam(
             account_name=param_dict["COUCH_USERNAME"],
@@ -33,3 +41,10 @@ def main(param_dict):
         return {"error": err}
 
     return {"dbs": client.all_dbs()}
+
+
+
+
+
+if __name__ == "__main__":
+    main(PARAM_DICT)
