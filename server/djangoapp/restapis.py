@@ -30,7 +30,7 @@ def get_request(url, **kwargs):
     status_code = response.status_code
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
-    return 
+    return json_data
 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
@@ -74,9 +74,11 @@ def get_dealers_from_cf(url, **kwargs):
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
-def get_dealer_by_id_from_cf(url, dealerId):
-    print("DELAR ID = " + dealerId)
-    json_result = get_request(url, id=dealerId)
+def get_dealer_by_id_from_cf(url, id):
+    dealer_obj = None
+    print("DELAR ID = " + str(id))
+    json_result = get_request(url, id=id)
+    print(json_result)
     if json_result:
         dealers = json_result["body"]
         dealer_doc = dealers["docs"][0]
