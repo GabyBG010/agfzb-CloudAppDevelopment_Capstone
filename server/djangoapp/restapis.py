@@ -3,7 +3,6 @@ import json
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
 import time
-from requests.auth import HTTPBasicAuth
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features,SentimentOptions
@@ -61,7 +60,7 @@ def get_dealers_from_cf(url, **kwargs):
     else:
         json_result = get_request(url)
     if json_result:
-        
+        print(json_result)
         for dealer in json_result:
             dealer_doc = dealer["doc"]
             dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"],
@@ -96,7 +95,6 @@ def get_dealer_by_id_from_cf(url, id):
 def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
     id = kwargs.get("id")
-    print("UrL REV = " + url)
     if id:
         json_result = get_request(url, id=id)
     else:
@@ -104,7 +102,6 @@ def get_dealer_reviews_from_cf(url, **kwargs):
     if json_result:
         #reviews = json_result#["body"]["data"]["docs"]
         reviews = json_result["data"]['docs']#['docs']
-        print("\nREVIEWS =============\n")
         print(reviews)
 
         print(reviews)
@@ -135,7 +132,7 @@ def analyze_review_sentiments(argtext):
     authenticator = IAMAuthenticator(api_key)
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
     natural_language_understanding.set_service_url(url)
-    xtext=argtext#+"hello, hello, hello."
+    xtext=argtext+"hello, hello, hello."
     response = natural_language_understanding.analyze(text=xtext,features=Features(sentiment=SentimentOptions(targets=[xtext]))).get_result()
     label=json.dumps(response, indent=2)
     label = response['sentiment']['document']['label']

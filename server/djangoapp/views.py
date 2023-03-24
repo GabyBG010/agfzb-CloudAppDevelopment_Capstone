@@ -103,10 +103,9 @@ def get_dealerships(request):
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/971551a2-9f28-496e-8f1a-9343e3e8ab77/dealership-package/get-dealership"
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
-        # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
-        return HttpResponse(dealer_names)
+        context = {}
+        context["dealership_list"] = dealerships
+        return render(request, 'djangoapp/index.html', context)
 
 def get_dealerships_by_state(request):
     if request.method == "GET":
@@ -123,13 +122,10 @@ def get_dealerships_by_state(request):
 def get_dealer_details(request, id):
     if request.method == "GET":
         context = {}
-        print("URL = " + dealer_url)
         dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
-        print("\nDEALER =========\n")
-        print(dealer)
+    
         context["dealer"] = dealer
         reviews = get_dealer_reviews_from_cf(getreview_url, id=id)
-        print(reviews)
         context["reviews"] = reviews
         return render(request, 'djangoapp/dealer_details.html', context)
 
