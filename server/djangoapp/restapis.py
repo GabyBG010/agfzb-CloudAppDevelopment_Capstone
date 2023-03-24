@@ -133,7 +133,7 @@ def analyze_review_sentiments(argtext):
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
     natural_language_understanding.set_service_url(url)
     xtext=argtext+"hello, hello, hello."
-    response = natural_language_understanding.analyze(text=xtext,features=Features(sentiment=SentimentOptions(targets=[xtext]))).get_result()
+    response = natural_language_understanding.analyze(text=xtext,language='en',features=Features(sentiment=SentimentOptions(targets=[xtext]),)).get_result()
     label=json.dumps(response, indent=2)
     label = response['sentiment']['document']['label']
     return(label)
